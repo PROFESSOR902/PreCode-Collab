@@ -11,7 +11,7 @@ Here’s an expanded and refined version of your template list with additional r
 
 - **Generator**
   - **AI**
-    - Text-to-image
+    - AI Text-to-image
     - AI writer
     - AI chatbot
     - AI story generator
@@ -19,6 +19,7 @@ Here’s an expanded and refined version of your template list with additional r
     - AI plot/outliner
     - AI code generator
     - AI text rewriter
+    - AI-generated music prompts (for tools like Soundraw, AIVA)
   - **Random Generators**
     - Name generator (character, fantasy, sci-fi)
     - Worldbuilding generator (planets, cities, lore)
@@ -38,8 +39,9 @@ Here’s an expanded and refined version of your template list with additional r
 - **Music**
   - Song title/lyric idea generator
   - Music genre/mood generator
-  - AI-generated music prompts (for tools like Soundraw, AIVA)
+  - Mixing
 - **Chat/Comments**
+  - Comments
   - AI group chat simulator
   - Forum comment generator
   - Roleplay dialogue generator
@@ -50,7 +52,7 @@ Here’s an expanded and refined version of your template list with additional r
 - **WebGUI**
   - Dashboard mockup generator
   - App interface prototype
-  - UI component library generator
+  - UI component library 
 - **UI/UX**
   - Design system prompter
   - Color palette + typography combiner

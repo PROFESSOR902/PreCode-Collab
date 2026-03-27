@@ -1,8 +1,8 @@
 # Templates
 This how the files are handled.
 
-- '.html' file Is the piece of code that is in the bottom right of the window, In the code editor space of perchance.org.
-- '.perch' file Is the piece of code that is in the top left of the window, In the code editor space of perchance.org.
+- ```.html``` file Is the piece of code that is in the bottom right of the window, In the code editor space of perchance.org.
+- ```.perch``` file Is the piece of code that is in the top left of the window, In the code editor space of perchance.org.
 
 Here’s an expanded and refined version of your template list with additional relevant categories and subcategories based on popular Perchance generator trends:
 

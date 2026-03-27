@@ -4,7 +4,7 @@ This how the files are handled.
 - ```.html``` file Is the piece of code that is in the bottom right of the window, In the code editor space of perchance.org.
 - ```.perch``` file Is the piece of code that is in the top left of the window, In the code editor space of perchance.org.
 
-Here’s an expanded and refined version of your template list with additional relevant categories and subcategories based on popular Perchance generator trends:
+**This ```.perch``` is not the official file extension. I chose this for easy implementation and sorting.**
 
 ## Templates to Work On  
 **This is just a starting list.  Of course, there are more that can be covered. Feel free to suggest other topics.**

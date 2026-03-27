@@ -1,0 +1,359 @@
+<!--# Last modified Mar/26/2026/ _:_-->
+<!DOCTYPE html>
+<html>
+  <head lang="en-us">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreCode-Collab</title>
+    <style>
+      /* Global Dark Theme & Scrollbar */
+      body { background-color:#121212; color:#e0e0e0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; overflow:hidden; text-align:left; }
+      .scrollBar { scrollbar-width: thin; scrollbar-color: #555 #1e1e1e; }
+      .scrollBar::-webkit-scrollbar { width:8px; }
+      .scrollBar::-webkit-scrollbar-track { background:#1e1e1e; }
+      .scrollBar::-webkit-scrollbar-thumb { background-color:#555; border-radius:4px; }
+      
+      /* Common UI Elements */
+      button { cursor:pointer; border:none; border-radius:4px; padding:8px 12px; font-weight:600; transition:opacity 0.2s; }
+      button:hover { opacity:0.8; }
+      .primary-btn { background-color:#3b82f6; color:white; }
+      .secondary-btn { background-color:#333; color:#e0e0e0; }
+      input, textarea { background-color:#2c2c2c; color:white; border:1px solid #444; padding:8px; border-radius:4px; font-family:monospace; }
+      input:focus, textarea:focus { outline:1px solid #3b82f6; border-color:transparent; } /* Cleaner focus style */
+      
+      /* Layout Utilities */
+      .flex-row { display:flex; align-items:center; gap:10px; }
+      .flex-col { display:flex; flex-direction:column; gap:10px; }
+      .full-h { height:100%; }
+      .full-w { width:100%; }
+      .hidden { display:none !important; }
+    </style>
+  </head>
+  <body class="scrollBar">
+  
+  <!-- Header Bar: Navigation -->
+    <div id="headerEl" style="position:fixed; top:0; left:0; width:100%; height:50px; background:#1e1e1e; border-bottom:1px solid #333; display:flex; align-items:center; padding:0 20px; z-index:1000; justify-content:space-between; box-shadow:0 2px 5px rgba(0,0,0,0.5);">
+      <div class="flex-row">
+        <button id="toggleSidebarBtn" class="secondary-btn" style="padding:4px 8px; font-size:18px;">☰</button>
+        <!-- Added onclick handler to title to navigate home -->
+        <span style="font-weight:bold; font-size:18px; color:#fff; cursor:pointer;" onclick="showView('home')" title="Go to Home">PreCode-Collab</span>
+      </div>
+      <nav class="flex-row">
+        <button id="navSearchBtn" class="secondary-btn" onclick="showView('search')">Search</button>
+        <button id="navCompareBtn" class="secondary-btn" onclick="showView('compare')">Code Compare</button>
+      </nav>
+    </div>
+
+  <!--sidebar element-->
+    <div id="sidebarEl" hidden class="scrollBar" style="position:fixed; text-align:justify; height:100vh; width:280px; background:#1e1e1e; top:0px; left:0px; padding-top:60px; padding-left:15px; padding-right:15px; z-index:999; overflow-y:auto; border-right:1px solid #333; box-shadow:2px 0 10px rgba(0,0,0,0.5);">
+      
+      <h3 style="color:#fff; border-bottom: 1px solid #444; margin-top:0;">About</h3>    
+      <p style="font-size:14px; color:#aaa; margin-bottom:20px;">
+        Pre Code Collab connects Perchance developers. Use the Search tool to find projects needing help, or the Code Compare tool to review code side-by-side.
+      </p>
+
+      <!-- <h3 style="color:#fff; border-bottom: 1px solid #444;">Feedback</h3> -->
+
+      <h3 style="color:whitesmoke; border-bottom: 1px solid gainsboro;">Comments/Chat Room</h3>    
+       <!--initiating chat floating window 1/3-->
+        <p onclick="openChat('lobby')" style="cursor:pointer; color:#3b82f6; text-decoration:underline;">Public Chat: Lobby <sub>⇲</sub></p>
+        <p onclick="openChat('feedback')" style="cursor:pointer; color:#3b82f6; text-decoration:underline;">Public Chat: Feedback <sub>⇲</sub></p>
+        <p onclick="openChat('random')" style="cursor:pointer; color:#3b82f6; text-decoration:underline;">Public Chat: Random <sub>⇲</sub></p>
+      <!--Dropdown-->
+        <h3 style="color:whitesmoke; border-bottom: 1px solid gainsboro; cursor:pointer;" onclick="toggleDropdown()">
+          Info Dropdown ▼
+        </h3>
+        <div id="dropdownCtn" hidden style="color:#aaa; font-size:13px; line-height:1.4;">
+          <p>Welcome to Precode Collab. This platform is designed to streamline the collaboration process on Perchance.org. Use the tools above to start working together.</p>
+        </div>
+    </div>
+
+    <!-- Floating Chat Window Container 2/3 (Used for Public Chats) -->
+    <div id="floatingChatWindowEl" hidden style="position:fixed; bottom:20px; right:20px; width:320px; height:400px; background:#1e1e1e; border:1px solid #444; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index:2000; display:flex; flex-direction:column; border-radius:5px; overflow:hidden;">
+      <!-- Chat Header -->
+      <div style="padding:8px; background:#252525; color:white; display:flex; justify-content:space-between; align-items:center; cursor:move; border-bottom:1px solid #333;" id="chatHeaderEl">
+        <span id="chatTitleEl" style="font-weight:bold; font-size:14px;">Chat</span>
+        <button onclick="closeChat()" style="background:none; border:none; color:#aaa; font-size:16px; cursor:pointer; font-weight:bold;">✖</button>
+      </div>
+      <!-- Chat Content (where commentsPlugin loads) -->
+      <div id="chatContentEl" style="flex:1; width:100%; height:100%; overflow:hidden;"></div>
+    </div>
+
+    <!--Main Contents Container -->
+    <div id="mainContentCtn" style="margin-top:50px; height:calc(100vh - 50px); position:relative;">
+
+      <!-- VIEW 0: Home / Updates / About -->
+      <div id="homeViewEl" class="scrollBar" style="padding:40px; max-width:100%; margin:0 auto; height:100%; overflow-y:auto;">
+        <h1 style="color:#3b82f6; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">Welcome to PreCode-Collab</h1>
+        
+        <div style="background:#1e1e1e; padding:20px; border-radius:8px; border:1px solid #333; margin-bottom:30px;">
+          <h2 style="margin-top:0; color:#fff;">About This Platform</h2>
+          <pre style="line-height:1.6; color:#ccc;">
+Precode-Collab description outlines a three-tool platform with a dark-themed UI for Perchance developers:  
+
+### Core Features  
+1. Code Compare  
+   - *Current*: Manual copy/paste from two generator URLs into side-by-side text boxes.  
+   - *Future*: Auto-import code directly from URLs (no manual copying).  
+
+2. Search Engine  
+   - Scans Perchance for generators tagged #precodecollab in titles/descriptions.  
+   - *Exclusively* lists projects where creators *want* collaborators.  
+
+3. Generator Chat Rooms  
+   - Clicking a generator opens a live chat room *instead* of the generator itself.  
+   - Enables real-time discussion *while* viewing/comparing code in the same window.  
+
+### UI/UX Details  
+- Header Bar: Quick navigation to Search and Code Compare tools.  
+- Side Panel: Pop-out window with:  
+  - Explanations of Precode Collab’s purpose.  
+  - User feedback form for feature requests.  
+- Design: Professional dark theme with high readability (optimized fonts/contrast).   
+          </pre>
+          <!-- <p style="line-height:1.6; color:#ccc;">
+            Whether you are an expert coder looking for a writer, or a writer looking for a technical partner to build your dream generator, this platform provides the tools to connect.
+          </p> -->
+        </div>
+
+        <div style="background:#1e1e1e; padding:20px; border-radius:8px; border:1px solid #333; margin-bottom:30px;">
+          <h2 style="margin-top:0; color:#fff;">Perchance.org **Terms of Service** check</h2>
+          <pre style="line-height:1.6; color:#ccc;">
+Based on Perchance.org’s **Terms of Service** and community practices:
+
+### ✅ Likely Allowed:
+- **Code Compare**: Fetching public generator code via `/api/getGenerator` is acceptable.
+- **Search Engine**: Scanning for `#precodecollab` tags is fine if done responsibly (rate-limited, non-intrusive).
+- **UI/UX Features**: Header, side panel, and dark theme are permitted.
+
+### ⚠️ Potential Issues:
+- **Auto-import (Future Feature)**: Heavy or automated fetching may be seen as **abuse** if it overloads servers.
+- **Generator Chat Rooms**: Redirecting generator clicks to chat rooms **may violate** ToS if it alters 
+  intended behavior or misleads users. 
+
+### Key Rules from ToS:
+- Perchance reserves the right to **disable any content or access** that burdens systems or violates intent. 
+- No explicit ban on APIs, but **excessive scraping/automation** can be restricted. 
+
+### Recommendation:
+- Implement **rate limiting** and caching.
+- Make chat rooms **opt-in**, not a replacement for generator links.
+- Monitor for official API updates or policies.
+
+"Make chat rooms opt-in, not a replacement for generator links" means:
+
+Your app should **not intercept or redirect** clicks on generator links (e.g., turning `perchance.org/my-gen` 
+into a chat room). Doing so alters the intended behavior of Perchance content and may violate their 
+**Terms of Service** by misrepresenting or modifying user-generated links. 
+
+Instead:
+- **Show generator links as-is**
+- Provide a **separate, clear option** (e.g., a "Discuss This Generator" button) to open a chat room
+- Let users **choose** to join a chat, rather than forcing it
+
+This respects Perchance’s ecosystem, avoids confusion, and complies with their policy 
+against unauthorized modification of generator experiences.
+        </pre>
+        </div>
+
+        
+        <div class="flex-row" style="flex-wrap:wrap; gap:20px;">
+          <div style="flex:1; min-width:300px; background:#1e1e1e; padding:20px; border-radius:8px; border:1px solid #333;">
+            <h3 style="margin-top:0; color:#4ade80;">Search Projects</h3>
+            <p style="color:#aaa;">Browse through a list of open projects tagged with <code>#precodecollab</code>. Find a project that sparks your interest and join the team.</p>
+            <button class="primary-btn" onclick="showView('search')" style="margin-top:10px;">Go to Search</button>
+          </div>
+
+          <div style="flex:1; min-width:300px; background:#1e1e1e; padding:20px; border-radius:8px; border:1px solid #333;">
+            <h3 style="margin-top:0; color:#f472b6;">Code Compare</h3>
+            <p style="color:#aaa;">Use our side-by-side code editor to review changes, debug logic, or merge snippets with your partners in real-time.</p>
+            <button class="primary-btn" onclick="showView('compare')" style="margin-top:10px;">Open Compare Tool</button>
+          </div>
+        </div>
+
+        <div style="margin-top:40px; background:#1e1e1e; padding:20px; border-radius:8px; border:1px solid #333;">
+          <h2 style="margin-top:0; color:#fff;">Latest Updates</h2>
+          <ul style="color:#aaa; line-height:1.8; padding-left:20px;">
+            <li><strong>[Mar/26/2026]</strong> <span style="color:#e0e0e0;">Platform Launch:</span> PreCode-Collab is now live! Initial features include Search and Code Comparison.</li>
+            <li><strong>nuthing</strong> <span style="color:#e0e0e0;">User Profiles:</span> Ability to set developer skills and contact info.</li>
+            <li><strong>nuthing</strong> <span style="color:#e0e0e0;">Direct Project Linking:</span> Seamless integration with Perchance generator pages.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- VIEW 1: Search Engine -->
+      <div id="searchViewEl" class="hidden scrollBar" style="padding:20px; max-width:900px; margin:0 auto; height:100%; overflow-y:auto;">
+        <h2 style="margin-top:0;">Collaboration Search</h2>
+        <div class="flex-row" style="margin-bottom:20px;">
+          <input id="searchInput" type="text" placeholder="Search generators tagged #precodecollab..." class="full-w" style="padding:12px;">
+          <button class="primary-btn" onclick="performSearch()">Search</button>
+          <p><--Press me to show example</p>
+        </div>
+        <div id="searchResultsCtn" class="flex-col">
+          <!-- Results injected here -->
+          <div style="text-align:center; color:#555; margin-top:50px;">Enter a term to search for generators seeking collaborators.</div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: Code Compare -->
+      <div id="compareViewEl" class="hidden" style="padding:20px; height:100%; display:flex; flex-direction:column;">
+        <div class="flex-row" style="justify-content:space-between; margin-bottom:10px;">
+          <h2 style="margin:0;">Code Compare</h2>
+          <button class="primary-btn" onclick="alert('Comparison logic would go here.')">Compare</button>
+        </div>
+        <div class="flex-row" style="flex:1; overflow:hidden; gap:10px;">
+          <textarea id="compareCodeA" placeholder="Paste Code A here..." class="full-w full-h" style="resize:none;"></textarea>
+          <textarea id="compareCodeB" placeholder="Paste Code B here..." class="full-w full-h" style="resize:none;"></textarea>
+        </div>
+      </div>
+
+      <!-- VIEW 3: Generator Chat Room (Specific Project) -->
+      <div id="generatorChatViewEl" class="hidden" style="height:100%; display:flex; flex-direction:column; background:#121212;">
+        <!-- Generator Header -->
+        <div style="padding:15px; background:#1e1e1e; border-bottom:1px solid #333; display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <button class="secondary-btn" onclick="showView('search')" style="padding:4px 8px; margin-right:10px;">← Back</button>
+            <span id="genTitleEl" style="font-weight:bold; font-size:18px; color:#fff;">Project Name</span>
+          </div>
+          <span style="color:#aaa; font-size:12px;">#precodecollab</span>
+        </div>
+        
+        <!-- Generator Workspace: Split View -->
+        <div class="flex-row" style="flex:1; overflow:hidden;">
+          <!-- Left: Discussion -->
+          <div style="width:50%; border-right:1px solid #333; display:flex; flex-direction:column;">
+            <div style="padding:10px; background:#181818; font-size:14px; font-weight:bold; color:#aaa;">Live Discussion</div>
+            <div id="genChatContentEl" style="flex:1; overflow:hidden;"></div>
+          </div>
+          
+          <!-- Right: Code/Compare Context -->
+          <div style="width:50%; display:flex; flex-direction:column; padding:10px;">
+             <div style="padding:5px; font-size:12px; color:#888;">Paste relevant code snippets here for discussion:</div>
+             <textarea id="genCodeContextEl" class="full-w full-h" style="background:#151515; border:none; resize:none;" placeholder="Paste code..."></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      
+    // Toggle sidebar visibility //
+      let isSidebarOpen = false;
+      toggleSidebarBtn.onclick = function() {
+        isSidebarOpen = !isSidebarOpen;
+        sidebarEl.hidden = !isSidebarOpen;
+      };
+
+      function toggleDropdown() {
+        dropdownCtn.hidden = !dropdownCtn.hidden; // Prefer hidden attribute over style.display
+      }
+
+    // View Navigation Logic
+      function showView(viewName) {
+        // Hide all views using classList to respect the CSS .hidden rule
+        homeViewEl.classList.add('hidden');
+        searchViewEl.classList.add('hidden');
+        compareViewEl.classList.add('hidden');
+        generatorChatViewEl.classList.add('hidden');
+        
+        // Reset Nav buttons
+        navSearchBtn.style.background = '#333';
+        navCompareBtn.style.background = '#333';
+
+        // Show selected by removing the 'hidden' class
+        if(viewName === 'home') {
+          homeViewEl.classList.remove('hidden');
+        } else if(viewName === 'search') {
+          searchViewEl.classList.remove('hidden');
+          navSearchBtn.style.background = '#3b82f6';
+        } else if(viewName === 'compare') {
+          compareViewEl.classList.remove('hidden');
+          navCompareBtn.style.background = '#3b82f6';
+        } else if(viewName === 'generatorChat') {
+          generatorChatViewEl.classList.remove('hidden');
+        }
+      }
+
+    // Search Engine Logic
+      // Mock data for demonstration
+      let mockGenerators = [
+        { id: 'fantasy-rpg', title: 'Fantasy RPG Generator', desc: 'Looking for help with combat mechanics logic.' },
+        { id: 'ai-chat', title: 'Advanced AI Chat', desc: 'Need a collaborator to refine the personality matrix.' },
+        { id: 'pixel-art', title: 'Pixel Art Asset Gen', desc: 'Seeking someone to expand the color palette database.' }
+      ];
+
+      function performSearch() {
+        let query = searchInput.value.toLowerCase();
+        let html = '';
+        
+        // Filter mock data
+        let results = mockGenerators.filter(g => 
+          g.title.toLowerCase().includes(query) || g.desc.toLowerCase().includes(query)
+        );
+
+        if(results.length === 0) {
+          html = '<div style="text-align:center; color:#777;">No generators found matching #precodecollab.</div>';
+        } else {
+          results.forEach(g => {
+            html += `
+              <div onclick="openGeneratorChat('${g.id}', '${g.title}')" style="background:#1e1e1e; padding:15px; border:1px solid #333; border-radius:4px; cursor:pointer; transition:border-color 0.2s; margin-bottom:10px;">
+                <div style="font-weight:bold; font-size:16px; color:#3b82f6; margin-bottom:5px;">${g.title}</div>
+                <div style="color:#aaa; font-size:14px;">${g.desc}</div>
+                <div style="margin-top:8px; font-size:12px; color:#666;">Click to join chat room &rarr;</div>
+              </div>
+            `;
+          });
+        }
+        searchResultsCtn.innerHTML = html;
+      }
+
+    // Generator Chat Logic
+      function openGeneratorChat(id, title) {
+        genTitleEl.textContent = title;
+        // Load specific chat for this generator
+        genChatContentEl.innerHTML = commentsPlugin({channel: "gen-" + id, width: "100%", height: "100%"});
+        showView('generatorChat');
+      }
+
+    // Chat window functions 3/3 (Floating Public Chat) //
+      function openChat(channel) {
+        chatTitleEl.textContent = "Chat: " + channel.charAt(0).toUpperCase() + channel.slice(1);
+        // Load the comments plugin into the floating window
+        chatContentEl.innerHTML = commentsPlugin({channel: channel, width: "100%", height: "100%"});
+        floatingChatWindowEl.hidden = false;
+      };
+    
+      function closeChat() {
+        floatingChatWindowEl.hidden = true;
+      };
+
+    // Draggable Chat Window Logic
+      let isDraggingChat = false;
+      let chatOffsetX = 0;
+      let chatOffsetY = 0;
+
+      chatHeaderEl.addEventListener('mousedown', (e) => {
+        if(e.target.tagName === 'BUTTON') return; // Don't drag if clicking close button
+        isDraggingChat = true;
+        let rect = floatingChatWindowEl.getBoundingClientRect();
+        chatOffsetX = e.clientX - rect.left;
+        chatOffsetY = e.clientY - rect.top;
+        floatingChatWindowEl.style.bottom = 'auto'; // Clear bottom positioning
+        floatingChatWindowEl.style.right = 'auto';  // Clear right positioning
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if(!isDraggingChat) return;
+        e.preventDefault();
+        floatingChatWindowEl.style.left = (e.clientX - chatOffsetX) + 'px';
+        floatingChatWindowEl.style.top = (e.clientY - chatOffsetY) + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingChat = false;
+      });
+      
+    </script>
+  </body>
+</html>

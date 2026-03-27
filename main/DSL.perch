@@ -1,0 +1,116 @@
+// # Last modified Mar/26/2026/ 11:20
+
+commentsPlugin = {import:comments-plugin}
+//codeEditor = {import:code-editor}
+
+// This is used for browser tab title, social media sharing 'card', search engines, community generator listing, etc.  
+$meta 
+  title = PreCode-collab
+  description = Template
+  //image = 
+  header
+    //mode = minimal
+    background = light-dark(lightblue, #003e84)
+
+
+// <a href="#" style="color:#3b82f6;">Perchance</a> community.
+
+
+// Based on Perchance.org’s **Terms of Service** and community practices:
+
+// ### ✅ Likely Allowed:
+// - **Code Compare**: Fetching public generator code via `/api/getGenerator` is acceptable.
+// - **Search Engine**: Scanning for `#precodecollab` tags is fine if done responsibly (rate-limited, non-intrusive).
+// - **UI/UX Features**: Header, side panel, and dark theme are permitted.
+
+// ### ⚠️ Potential Issues:
+// - **Auto-import (Future Feature)**: Heavy or automated fetching may be seen as **abuse** if it overloads servers.
+// - **Generator Chat Rooms**: Redirecting generator clicks to chat rooms **may violate** ToS if it alters intended behavior or misleads users. 
+
+// ### Key Rules from ToS:
+// - Perchance reserves the right to **disable any content or access** that burdens systems or violates intent. 
+// - No explicit ban on APIs, but **excessive scraping/automation** can be restricted. 
+
+// ### Recommendation:
+// - Implement **rate limiting** and caching.
+// - Make chat rooms **opt-in**, not a replacement for generator links.
+// - Monitor for official API updates or policies.
+
+// "Make chat rooms opt-in, not a replacement for generator links" means:
+
+// Your app should **not intercept or redirect** clicks on generator links (e.g., turning `perchance.org/my-gen` into a chat room). Doing so alters the intended behavior of Perchance content and may violate their **Terms of Service** by misrepresenting or modifying user-generated links. 
+
+// Instead:
+// - **Show generator links as-is**
+// - Provide a **separate, clear option** (e.g., a "Discuss This Generator" button) to open a chat room
+// - Let users **choose** to join a chat, rather than forcing it
+
+// This respects Perchance’s ecosystem, avoids confusion, and complies with their policy against unauthorized modification of generator experiences.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   // <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-top:50px;">
+   //    <textarea id="url1" placeholder="Paste Generator URL 1"></textarea>
+   //    <textarea id="url2" placeholder="Paste Generator URL 2"></textarea>
+   //    <button onclick="compareCode()">Compare</button>
+   //  </div>
+   //  <div id="comparisonResult" style="display:flex; gap:10px;"></div>
+
+// async function compareCode() {
+//       const fetchGenerator = async (url) => {
+//         const res = await fetch(`https://perchance.org/api/getGenerator?name=${url.split('/').pop()}`);
+//         return await res.text();
+//       };
+      
+//       const code1 = await fetchGenerator(url1.value);
+//       const code2 = await fetchGenerator(url2.value);
+      
+//       comparisonResult.innerHTML = 
+//         `<pre style="flex:1; border:1px solid #333;">${escapeHtml(code1)}</pre>` +
+//         `<pre style="flex:1; border:1px solid #333;">${escapeHtml(code2)}</pre>`
+//       ;
+//     }
+    
+//     function escapeHtml(unsafe) {
+//       return unsafe
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;")
+//         .replace(/"/g, "&quot;")
+//         .replace(/'/g, "&#039;");
+//     }
+

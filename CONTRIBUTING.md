@@ -1,4 +1,6 @@
 how you can contribute to **Precode-Collab** in the following ways:
+(Note: Still needs development for better clarity. Go to [PreCode-Collade](https://perchance.org/precode-collab) Feel free to contribute/Ask where to start? in the feedback comment section. )
+
 
 ### 💻 Code Contributions
 - Fix bugs in existing features (e.g., complete **Chat System** room functionality).

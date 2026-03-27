@@ -1,4 +1,4 @@
-how you can contribute to **Precode-Collab** repository in the following ways:
+how you can contribute to **Precode-Collab** in the following ways:
 
 ### 💻 Code Contributions
 - Fix bugs in existing features (e.g., complete **Chat System** room functionality).

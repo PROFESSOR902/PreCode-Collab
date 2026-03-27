@@ -1,6 +1,6 @@
 # PreCode-Collab
 - PreCode-Collab is on & is runging in [perchance.org](https://perchance.org/hub). URL for PreCode-Collab: https://perchance.org/precode-collab
-- Quick start to contribute. --> [CONTRIBUTING.md](https://github.com/PROFESSOR902/PreCode-Collab/blob/main/CONTRIBUTING.md)
+- Quick start to contribute. --> [CONTRIBUTING.md](https://github.com/PROFESSOR902/PreCode-Collab/blob/main/CONTRIBUTING.md) (Note: Still needs development for better clarity. Go to [PreCode-Collade](https://perchance.org/precode-collab) Feel free to contribute/Ask where to start? in the feedback comment section. )
 
 # PreCode-Collab - Documentation  
 

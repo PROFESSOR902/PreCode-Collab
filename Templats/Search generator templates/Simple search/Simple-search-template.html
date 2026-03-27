@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Perchance Generator Search</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #search { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 20px; }
+    .generator { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+    .generator:hover { background: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <h1>Search Perchance Generators</h1>
+  <input type="text" id="search" placeholder="Search by name or description..." />
+
+  <div id="results"></div>
+
+  <script>
+    let generators = [];
+
+    // Fetch generator list
+    async function loadGenerators() {
+      const res = await fetch('/api/getGeneratorList?max=100');
+      const data = await res.json();
+      generators = data.generators; // ← Extract the array
+      displayGenerators(generators);
+    }   
+
+    // Display generators
+    function displayGenerators(list) {
+      const resultsEl = document.getElementById('results');
+      resultsEl.innerHTML = list.map(gen => `
+        <div class="generator">
+          <h3>${gen.name}</h3>
+          <a href="https://perchance.org/${gen.name}" target="_blank">
+            Open Generator
+          </a>
+        </div>
+      `).join('');
+    }
+
+    // Search in real-time
+    document.getElementById('search').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const filtered = generators.filter(gen =>
+        gen.name.toLowerCase().includes(term)
+      );
+      displayGenerators(filtered);
+    });
+
+    // Load on start
+    loadGenerators();
+  </script>
+</body>
+</html>   

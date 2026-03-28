@@ -107,7 +107,7 @@ Precode Collab is a collaborative platform for Perchance coders to work together
 - [ ] Tutorials
             
 ## Precode Collab - ToS Compliance Checklist  
-**Before project is made public, these things have to be addressed ToS Requirements & Chat Room Access**
+Before project is made public, these things have to be addressed **ToS Requirements** & **Chat Room Access**
 
 ### ⚠️ Restricted Features  
 - [ ] Automatic Import  
